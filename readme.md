@@ -1,9 +1,16 @@
 # Prep 사용법
 
-## whl파일 설치
-pip install prep-0.0.1-py3-none-any.whl
+### 설치
+```
+$ python -m venv venv # 가상환경 만듬
+$ source venv/bin/activate # 가상환경 활성화
+$ ./build.sh # build스크립트 실행
+$ ls dist # build 확인
+prep-0.0.1-py3-none-any.whl	prep-0.0.1.tar.gz
+$ pip install dist/prep-0.0.1-py3-none-any.whl # 설치
 
-설치하고 나면, t-bears처럼 prep이라는 커맨드를 사용하여 P-rep을 등록 또는 삭제할 수 있다.
+```
+설치하고 나면, prep이라는 커맨드를 사용하여 P-rep을 등록 또는 삭제할 수 있다.
 제공하는 명령어는 register, unregister 두가지이며 사용법은 다음과 같다.
 
 ## 명령어 사용법

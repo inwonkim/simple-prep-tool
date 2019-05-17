@@ -67,7 +67,7 @@ def main():
 
         elif command == 'unregister':
             tx = CallTransactionBuilder().from_(wallet.get_address()).to(ZERO_ADDRESS). \
-                step_limit(100000000).nid(3).nonce(100).method("unregisterPRepCandidate").params({"foo": "bar"}).value(0).build()
+                step_limit(100000000).nid(3).nonce(100).method("unregisterPRepCandidate").value(0).build()
             signed_data = SignedTransaction(tx, wallet)
             result = icon_service.send_transaction(signed_data)
         else:
