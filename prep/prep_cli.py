@@ -59,6 +59,8 @@ def main():
             json_path = args.json
             with open(json_path, mode='r') as prep_info:
                 reg_info = json.load(prep_info)
+            public_key = wallet.bytes_public_key
+            reg_info['publicKey'] = f"0x{public_key.hex()}"
 
             tx = CallTransactionBuilder().from_(wallet.get_address()).to(ZERO_ADDRESS).step_limit(100000000). \
                 nid(3).nonce(100).method("registerPRepCandidate").params(reg_info).value(0).build()
