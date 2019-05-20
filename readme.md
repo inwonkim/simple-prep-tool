@@ -11,7 +11,7 @@ $ pip install dist/prep-0.0.1-py3-none-any.whl # 설치
 
 ```
 설치하고 나면, prep이라는 커맨드를 사용하여 P-rep을 등록 또는 삭제할 수 있다.
-제공하는 명령어는 register, unregister 두가지이며 사용법은 다음과 같다.
+제공하는 명령어는 register, unregister 세 가지이며 사용법은 다음과 같다.
 
 ## 명령어 사용법
 ## Prep 등록 : 
@@ -45,3 +45,24 @@ $ prep unregister -k keystore_file.json -p password123
 ```
 
 Prep unregister 명령어를 실행하기 위해선 키스토어 파일만 있으면 된다.
+
+## Candidate list 출력
+
+```
+$ prep candidate -u [노드url(기본값: http:localhost:9000/api/v3)] -j [참조할 json경로]
+```
+
+참조할 json은 getPRepCandidateList 메서드에 파라미터로 넘길 대한 정보를 가지고 있으며, 이 옵션에 값을 넘겨주지 않으면 빈 딕셔너리를 파라미터로 넘긴다.
+
+- json file 예
+```json
+{
+  "startRanking": "0x1",
+  "endRanking": "0x10"
+}
+```
+
+- candidate 명령 예
+```
+$ prep candidate
+```
