@@ -44,7 +44,7 @@ Prep register 명령어를 실행하기 위해선 keystore파일과 json파일�
 ### Usage
 
 ```bash
-$ prep unregister -k [키스토어경로] -p [키스토어 비밀번호(옵셔널)]  -u [노드url(기본값: http//:localhost:9000/api/v3)]
+$ prep unregister -k [키스토어경로] -p [키스토어 비밀번호(옵셔널)]  -u [노드url(기본값: http:localhost:9000/api/v3)] -a [삭제할 P-rep 주소(builtin-score-owner를 위한 옵션)]
 ```
 
 ### Example

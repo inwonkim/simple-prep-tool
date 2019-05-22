@@ -30,6 +30,7 @@ def get_parser():
     parser_unreg = subparsers.add_parser('unregister')
     parser_unreg.add_argument('-k', '--key', required=True)
     parser_unreg.add_argument('-p', '--password', required=False)
+    parser_unreg.add_argument('-a', '--address', required=False)
     parser_unreg.add_argument('-u', '--url', default="http://localhost:9000/api/v3")
 
     parser_candidate = subparsers.add_parser('candidate')
@@ -76,8 +77,12 @@ def main():
             result = icon_service.send_transaction(signed_data)
         elif command == 'unregister':
             wallet = get_wallet(args)
+            params = {}
+            if args.get('address'):
+                params['address'] = args['address']
             tx = CallTransactionBuilder().from_(wallet.get_address()).to(ZERO_ADDRESS). \
-                step_limit(100000000).nid(3).nonce(100).method("unregisterPRepCandidate").value(0).build()
+                step_limit(100000000).nid(3).nonce(100).method("unregisterPRepCandidate").\
+                params(params).value(0).build()
             signed_data = SignedTransaction(tx, wallet)
             result = icon_service.send_transaction(signed_data)
         elif command == 'candidate':
