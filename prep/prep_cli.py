@@ -26,12 +26,16 @@ def get_parser():
     parser_reg.add_argument('-p', '--password', required=False)
     parser_reg.add_argument('-k', '--key', required=True)
     parser_reg.add_argument('-u', '--url', default="http://localhost:9000/api/v3")
+    parser_reg.add_argument('-n', '--nid', default=3)
+    parser_reg.add_argument('-s', '--stepLimit', default=2_000_000)
 
     parser_unreg = subparsers.add_parser('unregister')
     parser_unreg.add_argument('-k', '--key', required=True)
     parser_unreg.add_argument('-p', '--password', required=False)
     parser_unreg.add_argument('-a', '--address', required=False)
     parser_unreg.add_argument('-u', '--url', default="http://localhost:9000/api/v3")
+    parser_unreg.add_argument('-n', '--nid', default=3)
+    parser_unreg.add_argument('-s', '--stepLimit', default=2_000_000)
 
     parser_candidate = subparsers.add_parser('candidate')
     parser_candidate.add_argument('-u', '--url', default="http://localhost:9000/api/v3")
@@ -60,6 +64,8 @@ def main():
     args = vars(parser.parse_args(cmd_args))
     command = args.get('command')
     url = args.get('url')
+    step_limit = int(args.get('stepLimit', 0))
+    nid = int(args.get('nid', 0))
     icon_service = IconService(HTTPProvider(url))
 
     try:
@@ -71,8 +77,8 @@ def main():
             public_key = wallet.bytes_public_key
             reg_info['publicKey'] = f"0x{public_key.hex()}"
 
-            tx = CallTransactionBuilder().from_(wallet.get_address()).to(ZERO_ADDRESS).step_limit(100000000). \
-                nid(3).nonce(100).method("registerPRepCandidate").params(reg_info).value(0).build()
+            tx = CallTransactionBuilder().from_(wallet.get_address()).to(ZERO_ADDRESS).step_limit(step_limit). \
+                nid(nid).nonce(100).method("registerPRepCandidate").params(reg_info).value(0).build()
             signed_data = SignedTransaction(tx, wallet)
             result = icon_service.send_transaction(signed_data)
         elif command == 'unregister':
@@ -81,7 +87,7 @@ def main():
             if args.get('address'):
                 params['address'] = args['address']
             tx = CallTransactionBuilder().from_(wallet.get_address()).to(ZERO_ADDRESS). \
-                step_limit(100000000).nid(3).nonce(100).method("unregisterPRepCandidate").\
+                step_limit(step_limit).nid(nid).nonce(100).method("unregisterPRepCandidate").\
                 params(params).value(0).build()
             signed_data = SignedTransaction(tx, wallet)
             result = icon_service.send_transaction(signed_data)

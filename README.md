@@ -18,7 +18,7 @@ $ pip install dist/prep-0.0.1-py3-none-any.whl # 설치
 ### Usage
 
 ```bash
-$ prep register -k [키스토어경로] -p [키스토어 비밀번호(옵셔널)] -j [참조할 json경로] -u [노드url(기본값: http://localhost:9000/api/v3)]
+$ prep register -k [키스토어경로] -p [키스토어 비밀번호(옵셔널)] -j [참조할 json경로] -u [노드url(기본값: http://localhost:9000/api/v3)] -n [nid(기본값:3)] -s [stepLimit(기본값: 200만)]
 ```
 
 ### Example
@@ -44,7 +44,7 @@ Prep register 명령어를 실행하기 위해선 keystore파일과 json파일�
 ### Usage
 
 ```bash
-$ prep unregister -k [키스토어경로] -p [키스토어 비밀번호(옵셔널)]  -u [노드url(기본값: http:localhost:9000/api/v3)] -a [삭제할 P-rep 주소(builtin-score-owner를 위한 옵션)]
+$ prep unregister -k [키스토어경로] -p [키스토어 비밀번호(옵셔널)]  -u [노드url(기본값: http:localhost:9000/api/v3)] -a [삭제할 P-rep 주소(builtin-score-owner를 위한 옵션)] -n [nid(기본값:3)] -s [stepLimit(기본값: 200만)]
 ```
 
 ### Example
