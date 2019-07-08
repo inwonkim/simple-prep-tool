@@ -21,25 +21,30 @@ def get_parser():
     subparsers.dest = 'command'
     subparsers.reqired = True
 
-    parser_reg = subparsers.add_parser('register')
-    parser_reg.add_argument('-j', '--json', required=True, help="")
-    parser_reg.add_argument('-p', '--password', required=False)
-    parser_reg.add_argument('-k', '--key', required=True)
-    parser_reg.add_argument('-u', '--url', default="http://localhost:9000/api/v3")
-    parser_reg.add_argument('-n', '--nid', default=3)
+    parser_reg = subparsers.add_parser('register', help="register prep")
+    parser_reg.add_argument('-j', '--json', required=True, help="Json file path."
+                                                                "The json file has prep register information")
+    parser_reg.add_argument('-p', '--password', required=False, help="password of keystore file")
+    parser_reg.add_argument('-k', '--key', required=True, help="keystore file path")
+    parser_reg.add_argument('-u', '--url', default="http://localhost:9000/api/v3", help="node uri")
+    parser_reg.add_argument('-n', '--nid', default=3, help="nid default(3)")
     parser_reg.add_argument('-s', '--stepLimit', default=2_000_000)
 
-    parser_unreg = subparsers.add_parser('unregister')
-    parser_unreg.add_argument('-k', '--key', required=True)
-    parser_unreg.add_argument('-p', '--password', required=False)
-    parser_unreg.add_argument('-a', '--address', required=False)
-    parser_unreg.add_argument('-u', '--url', default="http://localhost:9000/api/v3")
-    parser_unreg.add_argument('-n', '--nid', default=3)
+    parser_unreg = subparsers.add_parser('unregister', help="unregister prep")
+    parser_unreg.add_argument('-k', '--key', required=True, help="keystore file path")
+    parser_unreg.add_argument('-p', '--password', required=False, help="password of keystore file, optional")
+    parser_unreg.add_argument('-a', '--address', required=False, help="address to unregister."
+                                                                      "only builtinOwner can "
+                                                                      "unregister using address parameter")
+    parser_unreg.add_argument('-u', '--url', default="http://localhost:9000/api/v3", help="node uri")
+    parser_unreg.add_argument('-n', '--nid', default=3, help="nid default(3)")
     parser_unreg.add_argument('-s', '--stepLimit', default=2_000_000)
 
-    parser_candidate = subparsers.add_parser('candidate')
-    parser_candidate.add_argument('-u', '--url', default="http://localhost:9000/api/v3")
-    parser_candidate.add_argument('-j', '--json', required=False)
+    parser_candidate = subparsers.add_parser('preps', help="get PRep list")
+    parser_candidate.add_argument('-u', '--url', default="http://localhost:9000/api/v3", help="node uri")
+    parser_candidate.add_argument('-j', '--json', required=False, help="json file path."
+                                                                       "The json file has"
+                                                                       " startRanking, endRanking information ")
 
     return arg_parser
 
@@ -78,7 +83,7 @@ def main():
             reg_info['publicKey'] = f"0x{public_key.hex()}"
 
             tx = CallTransactionBuilder().from_(wallet.get_address()).to(ZERO_ADDRESS).step_limit(step_limit). \
-                nid(nid).nonce(100).method("registerPRepCandidate").params(reg_info).value(0).build()
+                nid(nid).nonce(100).method("registerPRep").params(reg_info).value(0).build()
             signed_data = SignedTransaction(tx, wallet)
             result = icon_service.send_transaction(signed_data)
         elif command == 'unregister':
@@ -87,11 +92,11 @@ def main():
             if args.get('address'):
                 params['address'] = args['address']
             tx = CallTransactionBuilder().from_(wallet.get_address()).to(ZERO_ADDRESS). \
-                step_limit(step_limit).nid(nid).nonce(100).method("unregisterPRepCandidate").\
+                step_limit(step_limit).nid(nid).nonce(100).method("unregisterPRep").\
                 params(params).value(0).build()
             signed_data = SignedTransaction(tx, wallet)
             result = icon_service.send_transaction(signed_data)
-        elif command == 'candidate':
+        elif command == 'preps':
             json_path = args.get('json')
             if json_path is not None:
                 with open(json_path, mode='r') as prep_info:
@@ -99,7 +104,7 @@ def main():
             else:
                 params = {}
             call_data = CallBuilder(from_=f"hx{'0'*40}", to=ZERO_ADDRESS,
-                                    method="getPRepCandidateList").params(params).build()
+                                    method="getPRepList").params(params).build()
             result = icon_service.call(call_data)
         else:
             print('unknown command')
