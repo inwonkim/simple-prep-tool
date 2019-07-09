@@ -15,6 +15,8 @@ $ pip install dist/prep-0.0.1-py3-none-any.whl # 설치
 
 ## Prep 등록
 
+Prep register 명령어를 실행하기 위해선 keystore파일과 json파일이 추가적으로 필요하다(prep 정보가 있는 json파일, prep의 public-key는 keystore file로 추출하기 때문에 생략한다.)
+
 ### Usage
 
 ```bash
@@ -29,7 +31,7 @@ $ cat prep1.json
         "email": "banana@example.com",
         "website": "https://icon.banana.com",
         "details": "https://icon.banana.com/json",
-        "p2pEndPoint": "target://123.45.67.89:7100",
+        "p2pEndPoint": "123.45.67.89:7100",
 }
 
 $ prep register -k ./keystore_test1 -p test1_Account -j ./prep1.json -u http://localhost:9000/api/v3
@@ -39,9 +41,10 @@ $ prep unregister -k ./keystore_test1 -p test1_Account -u http://localhost:9000/
 result:  0x9444ebbfdc4cb552db6cc52a2e95104525466e110eb52ff1215fc43cf32ecad0
 ```
 
-Prep register 명령어를 실행하기 위해선 keystore파일과 json파일이 추가적으로 필요하다(prep 정보가 있는 json파일, prep의 public-key는 keystore file로 추출하기 때문에 생략한다.)
 
 ## Prep 해지
+
+Prep unregister 명령어를 실행하기 위해선 키스토어 파일만 있으면 된다.
 
 ### Usage
 
@@ -56,9 +59,10 @@ $ prep unregister -k keystore_file.json -p password123 -u http://localhost:9000/
 result:  0x9444ebbfdc4cb552db6cc52a2e95104525466e110eb52ff1215fc43cf32ecad0
 ```
 
-Prep unregister 명령어를 실행하기 위해선 키스토어 파일만 있으면 된다.
 
-## Candidate list 출력
+## Prep list 출력
+
+등록되어 있는 PRep들을 출력한다.(j옵션을 사용하지 않는다면 모든 PRep을 출력하고, 사용한다면 설정한만큼의 PRep들만을 출력한다.)
 
 ### Usage
 
