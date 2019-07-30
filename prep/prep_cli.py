@@ -82,8 +82,17 @@ def main():
             public_key = wallet.bytes_public_key
             reg_info['publicKey'] = f"0x{public_key.hex()}"
 
-            tx = CallTransactionBuilder().from_(wallet.get_address()).to(ZERO_ADDRESS).step_limit(step_limit). \
-                nid(nid).nonce(100).method("registerPRep").params(reg_info).value(0).build()
+            register_fee: int = 2000 * 10 ** 18
+            tx = CallTransactionBuilder(). \
+                from_(wallet.get_address()). \
+                to(ZERO_ADDRESS). \
+                step_limit(step_limit). \
+                value(register_fee). \
+                nid(nid). \
+                nonce(100). \
+                method("registerPRep"). \
+                params(reg_info). \
+                build()
             signed_data = SignedTransaction(tx, wallet)
             result = icon_service.send_transaction(signed_data)
         elif command == 'unregister':
@@ -104,7 +113,7 @@ def main():
             else:
                 params = {}
             call_data = CallBuilder(from_=f"hx{'0'*40}", to=ZERO_ADDRESS,
-                                    method="getPRepList").params(params).build()
+                                    method="getPReps").params(params).build()
             result = icon_service.call(call_data)
         else:
             print('unknown command')
